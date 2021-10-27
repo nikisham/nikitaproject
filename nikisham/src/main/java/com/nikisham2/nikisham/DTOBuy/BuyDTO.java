@@ -2,9 +2,8 @@ package com.nikisham2.nikisham.DTOBuy;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Objects;
-
 public class BuyDTO {
+
     @JsonProperty("id")
     private String id;
 
