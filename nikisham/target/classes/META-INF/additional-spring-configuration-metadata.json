@@ -9,5 +9,35 @@
       "name": "spring.jpa.hibernate.naming-strategy",
       "type": "java.lang.String",
       "description": "Description for spring.jpa.hibernate.naming-strategy."
+    },
+    {
+      "name": "liquibase",
+      "type": "java.lang.String",
+      "description": "Description for liquibase."
+    },
+    {
+      "name": "liquibase",
+      "type": "java.lang.String",
+      "description": "Description for liquibase."
+    },
+    {
+      "name": "spring.datasource.drivjdbc",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.drivjdbc."
+    },
+    {
+      "name": "changeLogFile",
+      "type": "java.lang.String",
+      "description": "Description for changeLogFile."
+    },
+    {
+      "name": "spring.jpa.hibernate.naming-strategy",
+      "type": "java.lang.String",
+      "description": "Description for spring.jpa.hibernate.naming-strategy."
+    },
+    {
+      "name": "spring.datasource.drivjdbc",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.drivjdbc."
     }
   ] }

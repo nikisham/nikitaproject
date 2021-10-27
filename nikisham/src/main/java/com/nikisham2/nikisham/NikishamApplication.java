@@ -8,6 +8,7 @@ public class NikishamApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(NikishamApplication.class, args);
+
 	}
 
 }
