@@ -1,0 +1,20 @@
+server :
+    port : 0
+spring :
+    application :
+        name : nikisham
+    datasource :
+        driver-class-name : org.postgresql.Driver
+        url : ${DB_URL}
+        username : ${DB_USERNAME}
+        password : ${DB_PASSWORD}
+        type : com.zaxxer.hikari.HikariDataSource
+        hikari :
+            schema : ceo_schema
+    liquibase :
+        change-log : classpath:db/changelog-master.yaml
+        url : ${spring.datasource.url}
+        user : ${spring.datasource.username}
+        password : ${spring.datasource.password}
+    main :
+        lazy-initialization : true

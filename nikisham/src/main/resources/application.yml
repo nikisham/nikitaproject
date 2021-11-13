@@ -1,0 +1,22 @@
+spring :
+    application :
+        name : nikisham
+    datasource :
+        url : jdbc:postgresql://localhost:5432/changeIt
+        username : changeIt
+        password : changeIt
+        type : com.zaxxer.hikari.HikariDataSource
+        hikari :
+            driver-class-name : org.postgresql.Driver
+            schema : public
+    jpa :
+        open-in-view : false
+        properties :
+            hibernate :
+                jdbc.lob.non_contextual_creation : true
+    # Liquibase Properties
+    liquibase :
+        change-log : classpath:db/changelog-master.yaml
+        url : ${spring.datasource.url}
+        user : ${spring.datasource.username}
+        password : ${spring.datasource.password}

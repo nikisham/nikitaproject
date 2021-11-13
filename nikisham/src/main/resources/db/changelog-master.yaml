@@ -1,0 +1,12 @@
+databaseChangeLog :
+
+    -   changeSet :
+            id : 20211113/nikisham
+            author : nikisham
+            changes :
+                -   sqlFile :
+                        dbms : postgresql
+                        endDelimiter : \n;;
+                        path : db/changelog/init.sql
+                        splitStatements : true
+                        stripComments : true

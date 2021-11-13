@@ -1,9 +1,0 @@
-   spring:
-      datasource:
-        url: jdbc:postgresql://localhost:5432/postgres
-
-        username: postgres
-        driver-class-name: org.postgresql.Driver
-        password: Nikpro2002
-      liquibase:
-        change-log: classpath:db/changelog/db.changelog-master.yaml
