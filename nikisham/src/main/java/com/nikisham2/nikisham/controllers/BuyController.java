@@ -1,46 +1,44 @@
 package com.nikisham2.nikisham.controllers;
 
+import com.nikisham2.nikisham.dto.BuyDTO;
+import com.nikisham2.nikisham.service.BuyService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nikisham2.nikisham.DTOBuy.BuyDTO;
-import com.nikisham2.nikisham.repositories.BuyRepositories;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
+import javax.validation.Valid;
+import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
+@RequiredArgsConstructor
 @RestController
+@RequestMapping("buy")
 public class BuyController {
+    private final BuyService service;
 
-    private final static Logger logger = LoggerFactory.getLogger(BuyRepositories.class);
-    private BuyRepositories buyRepositories;
-    @Autowired
-    public BuyController(BuyRepositories buyRepositories) {
-    this.buyRepositories = buyRepositories;
+    @GetMapping("all")
+    public List<BuyDTO> getAll() {
+        return service.getAll();
     }
 
-    @RequestMapping("json")
-    public void json(){
-        URL url= this.getClass().getClassLoader().getResource("buy.json");
-        File jsonFile = new File(url.getFile());
-        if(url!=null) {
-            ObjectMapper objectMapper = new ObjectMapper();
-            try {
-                List<BuyDTO> buys = objectMapper.readValue(jsonFile, new TypeReference<List<BuyDTO>>() {
-                });
-                buyRepositories.saveAll(buys);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+    @GetMapping("one")
+    public BuyDTO getOne(@RequestParam Integer id) {
+        return service.getOne(UUID.randomUUID());
+    }
 
+    @PostMapping
+    public BuyDTO create(@Valid @RequestBody BuyDTO dto) {
+        return service.create(dto);
+    }
+
+    @PutMapping
+    public BuyDTO update(@Valid @RequestBody BuyDTO dto) {
+        return service.update(dto);
+    }
+
+    @DeleteMapping
+    public void delete(@RequestBody Collection<Integer> ids) {
+        service.delete(ids);
     }
 
 }

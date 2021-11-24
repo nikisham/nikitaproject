@@ -1,13 +1,13 @@
 package com.nikisham2.nikisham;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class NikishamApplicationTests {
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-	@Test
-	void contextLoads() {
-	}
+class NikishamApplicationTests extends BaseContainer {
+    @Test
+    void main() {
+        assertDoesNotThrow(() -> NikishamApplication.main("--spring.profiles.active=test"));
+    }
 
 }

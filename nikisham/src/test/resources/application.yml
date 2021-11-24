@@ -1,0 +1,20 @@
+server :
+    port : 5432
+spring :
+    application :
+        name : nikisham
+    datasource :
+        driver-class-name : org.postgresql.Driver
+        url : jdbc:postgresql://localhost:5432/postgres
+        username : postgres
+        password : Nikpro2002
+        type : com.zaxxer.hikari.HikariDataSource
+        hikari :
+            schema : public
+    liquibase :
+        change-log : classpath:db/changelog-master.yaml
+        url : ${spring.datasource.url}
+        user : ${spring.datasource.username}
+        password : ${spring.datasource.password}
+    main :
+        lazy-initialization : true
