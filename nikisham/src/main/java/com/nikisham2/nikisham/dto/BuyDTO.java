@@ -6,13 +6,14 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BuyDTO {
     @NotNull
-    private Integer id;
+    private UUID id;
     @NotBlank
     private String name;
     private String price;

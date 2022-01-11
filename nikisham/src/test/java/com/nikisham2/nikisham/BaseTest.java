@@ -16,6 +16,8 @@ import org.springframework.web.context.WebApplicationContext;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -23,13 +25,14 @@ import static org.junit.jupiter.api.Assertions.fail;
 @SpringBootTest
 public abstract class BaseTest extends BaseContainer {
     protected final ObjectMapper mapper = new ObjectMapper();
-    protected Integer buyId_1;
-    protected Integer buyId_2;
+    protected UUID buyId_1;
+    protected UUID buyId_2;
     protected MockMvc mockMvc;
     @Autowired
     private BuyRepository repository;
     @Autowired
     protected WebApplicationContext context;
+    private CharSequence[] args;
 
     @BeforeEach
     void setUp() {
@@ -40,8 +43,9 @@ public abstract class BaseTest extends BaseContainer {
             fail(e.getMessage());
         }
 
-        buyId_1 = repository.findAll().stream().findFirst().orElseThrow().getId();
-        buyId_2 = repository.findAll().stream().filter(buy -> buy.getId().equals(5)).findFirst().orElseThrow().getId();
+        /*buyId_1 = repository.findAll().stream().findFirst().orElseThrow().getId();
+        buyId_2 = repository.findAll().stream().filter(buy -> buy.getId().equals(5)).findFirst().orElseThrow().getId();*/
+
 
         this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
                 .addFilter((request, response, chain) -> {

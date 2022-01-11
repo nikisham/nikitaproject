@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
@@ -22,7 +23,7 @@ public class BuyController {
 
     @GetMapping("one")
     public BuyDTO getOne(@RequestParam Integer id) {
-        return service.getOne(id);
+        return service.getOne(UUID.randomUUID());
     }
 
     @PostMapping

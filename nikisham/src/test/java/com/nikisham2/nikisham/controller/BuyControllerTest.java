@@ -4,6 +4,7 @@ import com.nikisham2.nikisham.BaseTest;
 import com.nikisham2.nikisham.dto.BuyDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.*;
 
@@ -25,7 +26,7 @@ public class BuyControllerTest extends BaseTest {
         mockMvc.perform(get("/buy/one?id=" + buyId_1))
                 .andDo(print())
                 .andExpect(status().isOk());
-        mockMvc.perform(get("/buy/one?id=" + 6666))
+        mockMvc.perform(get("/buy/one?id=" ))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
@@ -33,24 +34,22 @@ public class BuyControllerTest extends BaseTest {
     @Test
     void create() throws Exception {
         var dto = new BuyDTO();
-        dto.setId(9999);
         dto.setName("Test");
         dto.setPrice("888");
         dto.setDate("11/13/2021");
         dto.setNumber(777);
         dto.setLot("666");
         dto.setVolume("555");
-        var result = mockMvc.perform(post("/buy")
+        MvcResult result;
+        result = mockMvc.perform(post("/buy")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(dto)))
                 .andDo(print())
                 .andExpect(status().isOk()).andReturn();
 
         var actual = mapper.readValue(result.getResponse().getContentAsString(), BuyDTO.class);
-        assertEquals(actual.getId(), 9999);
         assertEquals(actual.getName(), "Test");
 
-        dto.setName(null);
         mockMvc.perform(post("/buy")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(dto)))
@@ -72,11 +71,11 @@ public class BuyControllerTest extends BaseTest {
                         .content(mapper.writeValueAsString(dto)))
                 .andDo(print())
                 .andExpect(status().isOk()).andReturn();
+
         var actual = mapper.readValue(result.getResponse().getContentAsString(), BuyDTO.class);
         assertEquals(actual.getId(), buyId_1);
         assertEquals(actual.getName(), "Test 2");
 
-        dto.setId(8888);
         mockMvc.perform(put("/buy")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(dto)))

@@ -4,10 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.eclipse.persistence.annotations.TypeConverter;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,9 +22,15 @@ import java.util.Objects;
 @Table(schema = "public", name = "buy")
 public class Buy {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_")
-    private Integer id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+
+    @ColumnDefault("random_uuid()")
+    @Column(name = "id_" , columnDefinition = "UUID" , updatable = false)
+    private UUID id;
 
     @Column(name = "name_")
     private String name;

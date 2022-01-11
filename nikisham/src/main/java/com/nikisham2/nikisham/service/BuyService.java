@@ -1,10 +1,12 @@
 package com.nikisham2.nikisham.service;
 
+import com.nikisham2.nikisham.controllers.BuyController;
 import com.nikisham2.nikisham.dto.BuyDTO;
 import com.nikisham2.nikisham.entity.Buy;
 import com.nikisham2.nikisham.repository.BuyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +19,10 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 public class BuyService {
+
+    @Autowired
+    public BuyController buyController;
+
     private static final String ENTITY_NOT_FOUND = "Entity not found";
     private static final String ENTITY_EXIST = "Entity already exist";
     private final BuyRepository repository;
@@ -25,7 +31,7 @@ public class BuyService {
         return repository.findAll().stream().map(this::toDTO).collect(Collectors.toList());
     }
 
-    public BuyDTO getOne(Integer id) {
+    public BuyDTO getOne(UUID id) {
         return toDTO(repository.findById(id).orElseThrow(() -> {
             throw new EntityNotFoundException(ENTITY_NOT_FOUND);
         }));
@@ -53,7 +59,7 @@ public class BuyService {
     public void delete(Collection<Integer> ids) {
         ids.forEach(id -> {
             try {
-                repository.deleteById(id);
+                repository.deleteById(UUID.randomUUID());
             } catch (Exception e) {
                 throw new EntityNotFoundException(ENTITY_NOT_FOUND);
             }

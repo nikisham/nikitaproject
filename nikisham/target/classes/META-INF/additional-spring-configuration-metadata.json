@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "logging.language",
+      "type": "java.lang.String",
+      "description": "Language."
+    }
+  ]
+}
