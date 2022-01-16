@@ -1,93 +1,68 @@
 package com.nikisham2.nikisham.service;
 
 import com.nikisham2.nikisham.BaseTest;
-
 import com.nikisham2.nikisham.dto.BuyDTO;
-
 import com.nikisham2.nikisham.entity.Buy;
 import com.nikisham2.nikisham.repository.BuyRepository;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 
-
-import com.nikisham2.nikisham.BaseTest;
-import com.nikisham2.nikisham.dto.BuyDTO;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import java.io.DataInput;
 import java.util.*;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.testcontainers.shaded.org.awaitility.Awaitility.given;
 
 
 public class BuyServiceTest extends BaseTest {
-
-
     @Autowired
     public BuyService buyService;
-
-
-
-    @MockBean
     @Autowired
     private BuyRepository buyRepository;
 
     @Test
-    public void getAll() throws Exception{
-        List list = buyRepository.findAll();
-        assertNull(list);
+    public void getAll() {
+        List<BuyDTO> list = buyService.getAll();
+        assertNotNull(list);
+        //TODO Добавить проверки.
     }
 
     @Test
-    public void getOne(UUID id) throws Exception{
-        BuyDTO dto = buyRepository.findOne();
+    public void getOne() {
+        BuyDTO dto = buyService.getOne(buyId_1);
+        assertEquals(buyId_1, dto.getId());
+        //TODO Добавить проверки.
     }
 
     @Test
-    public void create(UUID id) throws Exception {
+    public void create() {
         BuyDTO dto = new BuyDTO();
+        dto.setId(UUID.randomUUID());
         dto.setName("Test111");
         dto.setPrice("8881");
         dto.setDate("11/13/2021");
         dto.setNumber(7771);
         dto.setLot("6661");
         dto.setVolume("5551");
-        buyRepository.save(dto);
-        assertNotNull(buyRepository.findById(id).get());
-//        when(buyRepository.save(BuyDTO.class)).thenReturn(BuyDTO);
-//        BuyDTO saveBuyDTO =buyRepository.save(dto);
-//        assertEquals(saveBuyDTO.getName(), "Test111");
+        UUID id = buyService.create(dto).getId();
+        assertNotNull(buyRepository.findById(id).orElse(null));
+        //TODO Добавить проверки. При создании запись уже существует с таким id
     }
+
     @Test
-    void update(UUID id) throws Exception {
-        BuyDTO dto = buyRepository.findById(id);
-        dto.setName("Test123");
-        buyRepository.save(dto);
-        assertNotEquals("Test111",buyRepository.findById(id).get().getName());
+    void update() {
+        BuyDTO dto = buyService.getOne(buyId_1);
+        dto.setName("Test123_update");
+        buyService.update(dto);
+        Buy entity = buyRepository.findById(buyId_1).orElse(null);
+        assertNotNull(entity);
+        assertEquals("Test123_update", entity.getName());
+        //TODO Добавить проверки. Нельзя обновить/создать запись которой нет
 
 
     }
+
     @Test
-    void delete(UUID id) throws Exception{
-        buyRepository.deleteById(buyId_1);
-        assertThat(buyRepository.existsById(id));
+    void delete() {
+        assertDoesNotThrow(() -> buyService.delete(List.of(buyId_2)));
+        //TODO Добавить проверки.
     }
 }

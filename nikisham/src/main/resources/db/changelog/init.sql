@@ -1,8 +1,7 @@
-CREATE SEQUENCE if not exists buy_id_seq;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TABLE IF NOT EXISTS public.buy
 (
-    id_      uuid PRIMARY KEY NOT NULL ,
+    id_      UUID PRIMARY KEY,
     name_    VARCHAR NOT NULL,
     price    VARCHAR,
     date_    VARCHAR,

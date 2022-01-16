@@ -22,8 +22,8 @@ public class BuyController {
     }
 
     @GetMapping("one")
-    public BuyDTO getOne(@RequestParam Integer id) {
-        return service.getOne(UUID.randomUUID());
+    public BuyDTO getOne(@RequestParam UUID id) {
+        return service.getOne(id);
     }
 
     @PostMapping
@@ -37,10 +37,8 @@ public class BuyController {
     }
 
     @DeleteMapping
-    public void delete(@RequestBody Collection<Integer> ids) {
+    public void delete(@RequestBody Collection<UUID> ids) {
         service.delete(ids);
     }
 
 }
-
-
