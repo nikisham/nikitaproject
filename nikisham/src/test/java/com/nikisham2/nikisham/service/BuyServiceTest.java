@@ -7,6 +7,9 @@ import com.nikisham2.nikisham.repository.BuyRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.persistence.EntityNotFoundException;
+import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -49,8 +52,8 @@ public class BuyServiceTest extends BaseTest {
     @Test
     public void getOne_EntityNotFound() {
         buyService.delete(List.of(buyId_1));
-        BuyDTO dto = buyService.getOne(buyId_1);
-        assertEquals("Entity not found", dto.getId());
+        assertThrows(EntityNotFoundException.class,() ->{ buyService.getOne(buyId_1);
+        });
     }
 
     @Test
@@ -141,8 +144,7 @@ public class BuyServiceTest extends BaseTest {
     @Test
     void delete_NoEntry() {
         buyService.delete(List.of(buyId_2));
-        BuyDTO dto = buyService.getOne(buyId_2);
-        System.out.println(buyId_2);
-        assertEquals(dto.getId(), "NOT_FOUND");
+        assertThrows(EntityNotFoundException.class,() ->{ buyService.delete(Collections.singleton(buyId_2));
+        });
     }
 }
