@@ -3,6 +3,8 @@ package telegramBot;
 import liquibase.pro.packaged.S;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updates.GetUpdates;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -33,6 +35,8 @@ public class Bot extends TelegramLongPollingBot {
         SendMessage sendMessage_1 = new SendMessage();
         sendMessage_1.setChatId(String.valueOf(update.getMessage()));
         sendMessage_1.getChatId();
+        EditMessageReplyMarkup editMessageReplyMarkup = new EditMessageReplyMarkup();
+        EditMessageText editMessageText_1 = new EditMessageText();
 
 
         if (update.hasMessage() && update.getMessage().hasText()) {
@@ -40,12 +44,14 @@ public class Bot extends TelegramLongPollingBot {
             Message message = update.getMessage();
             /*Double text_upd = Double.valueOf(message.getText());*/
             String text_upd = update.getMessage().getText();
-
+            long message_id_1 = update.getMessage().getMessageId();
+            editMessageText_1.setChatId(String.valueOf(editMessageText_1));
+            editMessageText_1.setMessageId((int) message_id_1);
 
 
                 String text = message.getText();
 
-                if (text.equals("1")) {
+                if (text.equals("/buy")) {
                     SendMessage sendMessage = new SendMessage();
                     sendMessage.setChatId(String.valueOf(chat_id));
                     sendMessage.setText("Привет");
@@ -238,17 +244,8 @@ public class Bot extends TelegramLongPollingBot {
                     } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
-                }else if (Double.valueOf(text_upd)>1000 && Double.valueOf(text_upd)<2000 && message.hasText() && !update.getMessage().equals("1")) {
-                    SendMessage sendMessage = new SendMessage();
-                    long chat_id_12 = update.getMessage().getChatId();
-                    sendMessage.setChatId(String.valueOf(chat_id_12));
-                    sendMessage.setText("Цена введена успешно");
-                    try {
-                        execute(sendMessage); // Sending our message object to user
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
-                    }
-            }else if (text.equals("Ввести кол-во лотов")) {
+                }
+                if (text.equals("Ввести кол-во лотов")) {
                     SendMessage sendMessage = new SendMessage();
                     sendMessage.setText("Введите сколько лотов хотите купить ");
                     sendMessage.setParseMode(ParseMode.MARKDOWN);
@@ -271,65 +268,52 @@ public class Bot extends TelegramLongPollingBot {
                         e.printStackTrace();
                     }
                 }
-            } else if (update.hasMessage() && update.hasCallbackQuery()) {
-                long chat_id = update.getMessage().getChatId();
-                long message_id = update.getCallbackQuery().getMessage().getMessageId();
-                String call_data = update.getCallbackQuery().getData();
-                Long chat_id_callback = update.getCallbackQuery().getMessage().getChatId();
-                if (call_data.equals("123")) {
-                    String answer = "Введите цену покупки3";
-                    EditMessageText editMessageText = new EditMessageText();
-                    editMessageText.setChatId(String.valueOf(chat_id_callback));
-                    editMessageText.setMessageId((int) message_id);
-                    editMessageText.setText(answer);
-                    try {
-                        execute(editMessageText);
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
-                    }
+                //TODO Сделать обработку текста в switch
+            /*if (Double.valueOf(text_upd) > 1000 && Double.valueOf(text_upd) < 2000 && message.hasText() && !update.getMessage().equals("1") && update.hasMessage()) {
+                SendMessage sendMessage_2 = new SendMessage();
+                long chat_id_12 = update.getMessage().getChatId();
+                sendMessage_2.setChatId(String.valueOf(chat_id_12));
+                sendMessage_2.setText("Цена введена успешно");
+                try {
+                    execute(sendMessage_2); // Sending our message object to user
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
                 }
-                if (call_data.equals("Button has been pressed")) {
-                    String answer = "Введите цену покупки2";
-                    EditMessageText editMessageText = new EditMessageText();
-                    editMessageText.setChatId(String.valueOf(chat_id_callback));
-                    editMessageText.setMessageId((int) message_id);
-                    editMessageText.setText(answer);
-                    try {
-                        execute(editMessageText);
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (call_data.equals("Button 1 has been pressed")) {
-                    String answer = "Введите цену покупки1";
-                    EditMessageText editMessageText = new EditMessageText();
-                    editMessageText.setChatId(String.valueOf(chat_id_callback));
-                    editMessageText.setMessageId((int) message_id);
-                    editMessageText.setText(answer);
-                    try {
-                        execute(editMessageText);
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
-                    }
+            }else if (message.hasText() && !update.getMessage().equals("1")){
+                SendMessage sendMessage_up = new SendMessage();
+                long chat_id_12 = update.getMessage().getChatId();
+                sendMessage_up.setChatId(String.valueOf(chat_id_12));
+                sendMessage_up.setText("Введите цену правильно");
+                try {
+                    execute(sendMessage_up); // Sending our message object to user
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
                 }
             }
-        /*if(update.getMessage().getText().equals("2") ){
-            SendMessage sendMessage = new SendMessage();
-            long chat_id = update.getMessage().getChatId();
-            sendMessage.setChatId(String.valueOf(chat_id));
-            if(update.getMessage().getText().equals("1000")){
-                sendMessage.setText("Привет");
+            if (Double.valueOf(text_upd) > 1 && Double.valueOf(text_upd) < 15 && message.hasText() && !update.getMessage().equals("1") && update.hasMessage()) {
+                SendMessage sendMessage_2 = new SendMessage();
+                long chat_id_12 = update.getMessage().getChatId();
+                sendMessage_2.setChatId(String.valueOf(chat_id_12));
+                sendMessage_2.setText("Лоты введены успешно");
+                try {
+                    execute(sendMessage_2); // Sending our message object to user
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            }else if (message.hasText() && !update.getMessage().equals("1")){
+                SendMessage sendMessage_up = new SendMessage();
+                long chat_id_12 = update.getMessage().getChatId();
+                sendMessage_up.setChatId(String.valueOf(chat_id_12));
+                sendMessage_up.setText("Введите лоты правильно");
+                try {
+                    execute(sendMessage_up); // Sending our message object to user
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
             }
-            else {
-                sendMessage.setText("dd");
-            }
+            } */
 
-            try {
-                execute(sendMessage);
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
-        }*/
+
 
         }
 
