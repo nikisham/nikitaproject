@@ -9,5 +9,14 @@ CREATE TABLE IF NOT EXISTS public.buy
     number_  INTEGER,
     volume   VARCHAR
 );
+CREATE TABLE IF NOT EXISTS public.TGbot
+(
+    chatId   INTEGER PRIMARY KEY,
+    active   BOOLEAN,
+    tool     VARCHAR,
+    price    VARCHAR,
+    lot      VARCHAR,
+    volume   VARCHAR
+);
 
 ;;
