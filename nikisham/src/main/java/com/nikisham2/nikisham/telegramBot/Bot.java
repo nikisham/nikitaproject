@@ -1,6 +1,11 @@
 package telegramBot;
 
+import com.nikisham2.nikisham.entity.TelegramUser;
+import com.nikisham2.nikisham.service.TelegramUserService;
 import liquibase.pro.packaged.S;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.mapping.Map;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -20,22 +25,34 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+import telegramBot.ComandContainer.CommandContainer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Component
-public class Bot extends TelegramLongPollingBot {
+@NoArgsConstructor
+@Data
+public class Bot extends TelegramLongPollingBot{
 
+    private TelegramUserService telegramUserService;
+    private CommandContainer commandContainer;
+
+    public Bot(TelegramUserService telegramUserService) {
+        this.telegramUserService = telegramUserService;
+        this.commandContainer = new CommandContainer(telegramUserService);
+    }
 
     @SneakyThrows
     @Override
-    public void onUpdateReceived(Update update) {
+    public void onUpdateReceived(Update update){
         Message message = update.getMessage();
-        String i = "1";
         if (message != null && message.hasText()) {
             switch (message.getText()) {
+                case "/start":
+                    Active_Сondition(update);
+                    break;
                 case "/buy":
                     SendMessage_Buy(message, "Это команда покупки");
                     System.out.println(message.getText());
@@ -68,6 +85,9 @@ public class Bot extends TelegramLongPollingBot {
                     SendMessage_Volume(message, "Это объём");
                     System.out.println(message.getText());
                     break;
+                case "/stop":
+                    Stop_Command("1" ,"Сессия остановленна");
+                    Stop_Command_Service(update);
 
             }
         }
@@ -289,9 +309,38 @@ public class Bot extends TelegramLongPollingBot {
             e.printStackTrace();
         }
     }
-
 }
+    public void Active_Сondition(Update update) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setText("Сессия открыта");
+        String chatId = update.getMessage().getChatId().toString();
+        telegramUserService.findByChatId(chatId).ifPresentOrElse(
+                user -> {
+                    user.setActive(true);
+                    telegramUserService.save(user);
+                },
+                () -> {
+                    TelegramUser telegramUser = new TelegramUser();
+                    telegramUser.setActive(true);
+                    telegramUser.setChatId(Integer.valueOf(chatId));
+                    telegramUserService.save(telegramUser);
+                });
+    }
+    public void Stop_Command(String chatId, String message){
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(chatId);
+        sendMessage.enableHtml(true);
+        sendMessage.setText("Сессия остановленна");
 
+
+    }
+    public void Stop_Command_Service(Update update) {
+        telegramUserService.findByChatId(update.getMessage().getChatId().toString())
+                .ifPresent(it -> {
+                    it.setActive(false);
+                    telegramUserService.save(it);
+                });
+    }
 
         public String getBotUsername () {
             return "@Adaptermtsb_bot";
@@ -307,4 +356,6 @@ public class Bot extends TelegramLongPollingBot {
             TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
             telegramBotsApi.registerBot(bot);
         }
-    }
+
+
+}
